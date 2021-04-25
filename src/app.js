@@ -36,6 +36,7 @@ console.log(document);
 
 
 document.getElementById('startButton').addEventListener('click', () => initGame());
+document.getElementById('replayButton').addEventListener('click', () => initGame());
 
 // Initialize core ThreeJS components
 //const initGame = () => {
@@ -44,7 +45,7 @@ const initGame = () => {
   console.log("We started the game");
   document.getElementById("menu-screen").style.display = 'none';
 
-  const scene = new SeedScene();
+  const scene = new SeedScene(endGame);
 
 
   const renderer = new WebGLRenderer({ antialias: true });
@@ -75,7 +76,9 @@ const initGame = () => {
     controls.update();
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
-    window.requestAnimationFrame(onAnimationFrameHandler);
+    if(!scene.state.gameOver) {
+      window.requestAnimationFrame(onAnimationFrameHandler);
+    }
   };
   window.requestAnimationFrame(onAnimationFrameHandler);
 
@@ -107,3 +110,10 @@ const initGame = () => {
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
 };
+
+const endGame = (loserId) => {
+  const winnerId = loserId == 1 ? 2 : 1;
+  document.querySelector('canvas').remove();
+  document.getElementById('finish-screen').style.display = 'flex';
+  document.getElementById('winnerText').innerText = 'Player ' + winnerId + ' wins!';
+}

@@ -1,10 +1,9 @@
 import * as Dat from 'dat.gui';
-import { VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry } from 'three';
-//import { Flower, Land } from 'objects';
+import { VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
+import { Flower, Land, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
-import {
-    Circle
-  } from 'objects';
+
+const radius = 5;
 function makeGradientCube(c1, c2, w, d, h, opacity){
     if(typeof opacity === 'undefined') opacity = 1.0;
     if(typeof c1 === 'number') c1 = new Color( c1 );
@@ -41,7 +40,7 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
     return new Mesh(cubeGeometry, cubeMaterial);
 }
 class SeedScene extends Scene {
-    constructor() {
+    constructor(endGame) {
         // Call parent Scene() constructor
         super();
 
@@ -73,11 +72,35 @@ class SeedScene extends Scene {
                 ArrowUp: false,
                 ArrowDown: false,
             },
+            endGameFunc: endGame,
+            loserId: -1,
+            gameOver: false,
+            scoreTime: undefined,
+            redScore: 0,
+            blueScore: 0,
+            time: 60,
+
         };
 
         // Set background to a nice color
         //maybe a sky blue?
         this.background = new Color(0x7ec0ee);
+        const ST = new ScoreTime(60);
+        this.state.scoreTime = ST;
+
+        var timing = null;
+        function timer() {
+           var time = ST.time;
+           if (time == 0) {
+               clearInterval(timing);
+           }
+           else {
+               ST.updateTime();
+           }
+        }
+
+        timing = setInterval(timer, 1000);
+
 
         // Add meshes to scene
         //we're going to need redPlayer, bluePlayer, football
@@ -112,13 +135,28 @@ class SeedScene extends Scene {
         wall3.rotateY(Math.PI/2);
         wall4.position.set(-width/2, 0, 0);
         wall4.rotateY(Math.PI/2);
+
+        
+        let goalGeomtry = new PlaneGeometry(50, 20, 1);
+        
+        //create red goal
+        let redGoalMaterial = new MeshBasicMaterial({color: 0xFF0000, side: DoubleSide});
+        const redGoal = new Mesh(goalGeomtry, redGoalMaterial);
+        redGoal.position.set(-199.5, 10, 0);
+        redGoal.rotateY(Math.PI/2);
+        //create blue goal
+        let blueGoalMaterial = new MeshBasicMaterial({color: 0x0000FF, side: DoubleSide});
+        const blueGoal = new Mesh(goalGeomtry, blueGoalMaterial);
+        blueGoal.position.set(199.5, 10, 0);
+        blueGoal.rotateY(Math.PI/2);
+        
         // Populate GUI
         //again, won't be necassary in final product.
         //this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         const gradientBox = makeGradientCube(0x000000, 0x003366, width, width, 200, 0.6);
         gradientBox.position.set(0,-100,0);
-        this.add(redCircle, blueCircle, wall1, wall2, wall3, wall4, lights, gradientBox);
+        this.add(redGoal, blueGoal, redCircle, blueCircle, wall1, wall2, wall3, wall4, lights, gradientBox);
     }
 
     addToUpdateList(object) {
@@ -157,61 +195,101 @@ class SeedScene extends Scene {
 
     
     update(timeStamp) {
-        //check collision between players. 
-        let diff, length, blueMom, redMom, transfer;
-        diff = this.state.red.circle.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
-        if(diff.length() < 10) {
-            length = diff.length();
-            diff.normalize().multiplyScalar(0.5*(10-length));
+        //check collision between players.
+        if(!this.state.gameOver) {
+            let diff, length, blueMom, redMom, transfer;
+            diff = this.state.red.circle.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
+            if(diff.length() < 10) {
+                length = diff.length();
+                diff.normalize().multiplyScalar(0.5*(10-length));
 
-            this.state.red.circle.circle.position.add(diff.clone());
-            this.state.blue.circle.circle.position.sub(diff.clone());
-            diff.normalize();
-            blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
-            redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
-            transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
-            this.state.red.circle.direction.add(transfer);
-            this.state.blue.circle.direction.sub(transfer); 
-        }
+                this.state.red.circle.circle.position.add(diff.clone());
+                this.state.blue.circle.circle.position.sub(diff.clone());
+                diff.normalize();
+                blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
+                redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
+                transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                this.state.red.circle.direction.add(transfer);
+                this.state.blue.circle.direction.sub(transfer); 
+            }
 
         //check between red and ball
-        diff = this.state.red.circle.circle.position.clone().sub(this.state.ball.circle.position.clone());
-        if(diff.length() < 10) {
-            length = diff.length();
-            diff.normalize().multiplyScalar(0.5*(10-length));
-
-            this.state.red.circle.circle.position.add(diff.clone());
-            this.state.ball.circle.position.sub(diff.clone());
-            diff.normalize();
-            blueMom = this.state.ball.direction.clone().projectOnVector(diff);
-            redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
-            transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
-            this.state.red.circle.direction.add(transfer.clone().multiplyScalar(0.5));
-            this.state.ball.direction.sub(transfer.clone().multiplyScalar(2)); 
-        }
+            diff = this.state.red.circle.circle.position.clone().sub(this.state.ball.circle.position.clone());
+            if(diff.length() < 10) {
+                length = diff.length();
+                diff.normalize().multiplyScalar(0.5*(10-length));
+                this.state.red.circle.circle.position.add(diff.clone());
+                this.state.ball.circle.position.sub(diff.clone());
+                diff.normalize();
+                blueMom = this.state.ball.direction.clone().projectOnVector(diff);
+                redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
+                transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                this.state.red.circle.direction.add(transfer.clone().multiplyScalar(0.5));
+                this.state.ball.direction.sub(transfer.clone().multiplyScalar(2)); 
+            }   
 
         //check between blue and ball
-        diff = this.state.ball.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
-        if(diff.length() < 10) {
-            length = diff.length();
-            diff.normalize().multiplyScalar(0.5*(10-length));
+            diff = this.state.ball.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
+            if(diff.length() < 10) {
+                length = diff.length();
+                diff.normalize().multiplyScalar(0.5*(10-length));
+                this.state.ball.circle.position.add(diff.clone());
+                this.state.blue.circle.circle.position.sub(diff.clone());
+                diff.normalize();
+                blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
+                redMom = this.state.ball.direction.clone().projectOnVector(diff);
+                transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                this.state.ball.direction.add(transfer.clone().multiplyScalar(2));
+                this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.5)); 
+            }
 
-            this.state.ball.circle.position.add(diff.clone());
-            this.state.blue.circle.circle.position.sub(diff.clone());
-            diff.normalize();
-            blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
-            redMom = this.state.ball.direction.clone().projectOnVector(diff);
-            transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
-            this.state.ball.direction.add(transfer.clone().multiplyScalar(2));
-            this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.5)); 
+
+            this.arrowsInput();
+            this.state.red.circle.update();
+            this.state.blue.circle.update();
+            this.state.ball.update();
+
+            if(this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+                this.state.redScore++;
+                this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
+                this.state.red.circle.circle.position.set(-100, 1, 0);
+                this.state.red.circle.direction.set(0,0,0);
+                this.state.blue.circle.circle.position.set(100, 1, 0);
+                this.state.blue.circle.direction.set(0,0,0);
+                this.state.ball.circle.position.set(0, 1, 0);
+                this.state.ball.direction.set(0,0,0);
+                if(this.state.redScore == 3) {
+                    this.state.gameOver = true;
+                    this.state.loserId = 2;
+                }
+                //redScored
+                
+            }
+
+            if(this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+                this.state.blueScore++;
+                this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
+                this.state.red.circle.circle.position.set(-100, 1, 0);
+                this.state.red.circle.direction.set(0,0,0);
+                this.state.blue.circle.circle.position.set(100, 1, 0);
+                this.state.blue.circle.direction.set(0,0,0);
+                this.state.ball.circle.position.set(0, 1, 0);
+                this.state.ball.direction.set(0,0,0);
+                if(this.state.blueScore == 3) {
+                    this.state.gameOver = true;
+                    this.state.loserId = 1;
+                }
+            }
+
+            if(this.state.gameOver) {
+                var endPause = new Clock();
+                endPause.start();
+                while (endPause.getElapsedTime() < 1) {
+                    continue;
+                  }
+                this.state.endGameFunc(this.state.loserId);
+            }
         }
-
-
-        this.arrowsInput();
-        this.state.red.circle.update();
-        this.state.blue.circle.update();
-        this.state.ball.update();
     }
 }
-
 export default SeedScene;

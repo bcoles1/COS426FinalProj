@@ -25,6 +25,7 @@ class Circle extends Group{
         this.circle = new Mesh(geometry, material);
         this.circle.position.set(-100 + (playerId-1)*200, 10, 0);
         this.circle.rotateX(3*Math.PI/2);
+        this.lost = false;
         parent.add(this.circle)
         //console.log(this.circle.position);
 
@@ -49,6 +50,7 @@ class Circle extends Group{
     }
     update() {
         let radius = 5
+        
     //maybe some reflection law logic to better improve bounces
     //this is trash at the minute, defintely improve a l'avenir
         if(this.circle.position.x + radius > 200) {

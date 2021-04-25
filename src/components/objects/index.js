@@ -1,1 +1,2 @@
 export { default as Circle } from './Circle.js';
+export { default as ScoreTime } from './ScoreTime.js';
