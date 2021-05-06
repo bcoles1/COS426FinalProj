@@ -1,29 +1,17 @@
 class ScoreTime {
-    constructor(gameTime) {
+    constructor() {
         this.element = document.createElement("div");
-        this.element.id = "ScoreTime";
-        this.element.innerText = "Red 0 - 0 Blue \n" + gameTime;
-        this.element.style.color = 'black';
-        this.element.style.fontFamily = 'Ansale Mono';
-        this.element.style.position = 'fixed';
-        this.element.style.textAlign = 'center';
+        this.element.setAttribute('style', 'font-size: 40px;border-style: ridge;background-color: rgb(201, 76, 76); padding: 5px ;position: absolute; top: 2%;left: 42%; z-index: 100; cursor: pointer; text-align: center; display: block');
+        this.element.innerText = "Red 0 - 0 Blue";
         document.body.append(this.element);
 
         this.redScore = 0;
         this.blueScore = 0;
-        this.time = gameTime;
     }
     updateScore(redScore, blueScore) {
-        this.element.innerText = "Red " + this.redScore + " - " + this.blueScore +"\n" + this.time;
         this.redScore = redScore;
         this.blueScore = blueScore;
-    }
-
-    updateTime() {
-        var newTime = this.time -1;
-        this.element.innerText = "Red " + this.redScore + " - " + this.blueScore +"\n" + newTime;
-        this.time = newTime;
-        return newTime;
+        this.element.innerText = "Red " + this.redScore + " - " + this.blueScore + "Blue";
         
     }
 }

@@ -1,8 +1,8 @@
 import * as Dat from 'dat.gui';
-import { VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
-import { Flower, Land, Circle, ScoreTime } from 'objects';
+import { TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
+import { Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
-
+import { Vector3 } from 'three';
 const radius = 5;
 function makeGradientCube(c1, c2, w, d, h, opacity){
     if(typeof opacity === 'undefined') opacity = 1.0;
@@ -85,21 +85,10 @@ class SeedScene extends Scene {
         // Set background to a nice color
         //maybe a sky blue?
         this.background = new Color(0x7ec0ee);
-        const ST = new ScoreTime(60);
+        const ST = new ScoreTime();
         this.state.scoreTime = ST;
 
-        var timing = null;
-        function timer() {
-           var time = ST.time;
-           if (time == 0) {
-               clearInterval(timing);
-           }
-           else {
-               ST.updateTime();
-           }
-        }
-
-        timing = setInterval(timer, 1000);
+       
 
 
         // Add meshes to scene
@@ -108,6 +97,13 @@ class SeedScene extends Scene {
         //const flower = new Flower(this);
         const lights = new BasicLights();
         //need to make this.
+
+
+        const stand1 = new Stand(this);
+        this.add(stand1);
+        //stand1.scale = new Vector3(0.1, 0.1, 0.1);
+        //stand1.scene.scale = new Vector3(0.1, 0.1, 0.1);
+        //console.log(stadium1);
         const redCircle = new Circle(this, 1);
         redCircle.circle.material.color = new Color( 0xff0000 );
         this.state.red.circle = redCircle;
@@ -136,27 +132,46 @@ class SeedScene extends Scene {
         wall4.position.set(-width/2, 0, 0);
         wall4.rotateY(Math.PI/2);
 
+        let fieldGeometry = new PlaneGeometry(width, 400, 1);
+        let texture = new TextureLoader().load('src/field.jpg');
+        let fieldMaterial = new MeshBasicMaterial({map: texture, side: DoubleSide});
+        const field = new Mesh(fieldGeometry, fieldMaterial);
+        field.position.set(0,1,0);
+        field.rotateX(-Math.PI/2);
+        field.rotateZ(Math.PI/2);
+
+        let fieldGeometry2 = new PlaneGeometry(2000, 2000, 1);
+        let texture2 = new TextureLoader().load('src/widerGrass.jpg');
+        let fieldMaterial2 = new MeshBasicMaterial({map: texture2, side: DoubleSide});
+        const field2 = new Mesh(fieldGeometry2, fieldMaterial2);
+        field2.position.set(0,0,0);
+        field2.rotateX(-Math.PI/2);
+
         
         let goalGeomtry = new PlaneGeometry(50, 20, 1);
         
         //create red goal
+        const goal1 = new Goal(this);
+        this.add(goal1); 
+        /*
         let redGoalMaterial = new MeshBasicMaterial({color: 0xFF0000, side: DoubleSide});
         const redGoal = new Mesh(goalGeomtry, redGoalMaterial);
         redGoal.position.set(-199.5, 10, 0);
         redGoal.rotateY(Math.PI/2);
+        
         //create blue goal
         let blueGoalMaterial = new MeshBasicMaterial({color: 0x0000FF, side: DoubleSide});
         const blueGoal = new Mesh(goalGeomtry, blueGoalMaterial);
         blueGoal.position.set(199.5, 10, 0);
         blueGoal.rotateY(Math.PI/2);
-        
+        */
         // Populate GUI
         //again, won't be necassary in final product.
         //this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
 
         const gradientBox = makeGradientCube(0x000000, 0x003366, width, width, 200, 0.6);
         gradientBox.position.set(0,-100,0);
-        this.add(redGoal, blueGoal, redCircle, blueCircle, wall1, wall2, wall3, wall4, lights, gradientBox);
+        this.add(gradientBox, field, field2, redCircle, blueCircle, wall1, wall2, wall3, wall4, lights);
     }
 
     addToUpdateList(object) {
@@ -224,8 +239,8 @@ class SeedScene extends Scene {
                 blueMom = this.state.ball.direction.clone().projectOnVector(diff);
                 redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
                 transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
-                this.state.red.circle.direction.add(transfer.clone().multiplyScalar(0.5));
-                this.state.ball.direction.sub(transfer.clone().multiplyScalar(2)); 
+                this.state.red.circle.direction.add(transfer.clone().multiplyScalar(0.25));
+                this.state.ball.direction.sub(transfer.clone().multiplyScalar(4)); 
             }   
 
         //check between blue and ball
@@ -239,8 +254,8 @@ class SeedScene extends Scene {
                 blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
                 redMom = this.state.ball.direction.clone().projectOnVector(diff);
                 transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
-                this.state.ball.direction.add(transfer.clone().multiplyScalar(2));
-                this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.5)); 
+                this.state.ball.direction.add(transfer.clone().multiplyScalar(4));
+                this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.25)); 
             }
 
 
@@ -252,11 +267,11 @@ class SeedScene extends Scene {
             if(this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
                 this.state.redScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 1, 0);
+                this.state.red.circle.circle.position.set(-100, 2, 0);
                 this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 1, 0);
+                this.state.blue.circle.circle.position.set(100, 2, 0);
                 this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 1, 0);
+                this.state.ball.circle.position.set(0, 2, 0);
                 this.state.ball.direction.set(0,0,0);
                 if(this.state.redScore == 3) {
                     this.state.gameOver = true;
@@ -269,11 +284,11 @@ class SeedScene extends Scene {
             if(this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
                 this.state.blueScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 1, 0);
+                this.state.red.circle.circle.position.set(-100, 2, 0);
                 this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 1, 0);
+                this.state.blue.circle.circle.position.set(100, 2, 0);
                 this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 1, 0);
+                this.state.ball.circle.position.set(0, 2, 0);
                 this.state.ball.direction.set(0,0,0);
                 if(this.state.blueScore == 3) {
                     this.state.gameOver = true;

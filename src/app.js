@@ -32,6 +32,7 @@ import {
   import {
     RenderPass
   } from 'three/examples/jsm/postprocessing/RenderPass.js';
+
 console.log(document);
 
 
