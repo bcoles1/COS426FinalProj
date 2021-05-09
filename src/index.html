@@ -12,18 +12,33 @@
     color: white;
   }
 
-  #menu-screen,
-  #finish-screen {
+  #menu-screen {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
     padding-top: 10em;
+    background-image: url('src/ctqo.gif');
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-size: 100% 100%;
+    height: 77vh ;
+    
   }
 
   #finish-screen {
     display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    background-image: url('src/win.gif');
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-size: 100% 100%;
+    height: 100vh ;
+    
   }
 
   #startButton,
@@ -37,6 +52,7 @@
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
+    font-size: 150%;
     color: #FFFFFF;
     text-align: center;
     transition: all 0.2s;
@@ -59,16 +75,17 @@
 
 <body>
   <div id='menu-screen'>
-    <h1 style="text-align: center;"> Physics Soccer Game</h1>
-    <h2 style="text-align: center;"> Hit The Ball With Your Character Into The Opponents Goal</h2>
-    <h2 style="text-align: center;"> Player 1: Arrow Keys</h2>
-    <h2 style="text-align: center;"> Player 2: WASD</h2>
-    <button id='startButton'>Start Game!</button>
+    <h1 style="text-align: center; position: absolute; bottom: 500px;font-size: +5; text-shadow:4px 2px grey; text-decoration:underline;"> Physics Soccer Game</h1>
+    <h3 style="text-align: center; position: absolute; bottom: 450px; line-height:1px;"> Hit The Ball With Your Character Into The Opponents Goal</h2>
+    <h3 style="text-align: center; position: absolute; bottom: 400px;line-height:1px;"> First to Three Goals Wins!</h2>
+    <h3 style="text-align: center; position: absolute; bottom: 350px;line-height:1px;"> Player 1: Arrow Keys</h2>
+    <h3 style="text-align: center; position: absolute; bottom: 300px;line-height:10px;"> Player 2: WASD</h2>
+    <button id='startButton', style="text-align: center; position: absolute; bottom: 200px;">Start Game!</button>
   </div>
 
   <div id='finish-screen'>
-    <h1>You Scored!</h1>
     <p id='winnerText'></p>
+    <p id='score'></p>
     <button id='replayButton'>Play again!</button>
   </div>
 </body>

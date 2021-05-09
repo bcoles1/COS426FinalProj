@@ -45,6 +45,7 @@ document.getElementById('replayButton').addEventListener('click', () => initGame
 const initGame = () => {
   console.log("We started the game");
   document.getElementById("menu-screen").style.display = 'none';
+  document.getElementById("finish-screen").style.display = 'none';
 
   const scene = new SeedScene(endGame);
 
@@ -112,9 +113,18 @@ const initGame = () => {
   window.addEventListener('keyup', onKeyUp);
 };
 
-const endGame = (loserId) => {
+const endGame = (loserId, red, blue) => {
   const winnerId = loserId == 1 ? 2 : 1;
   document.querySelector('canvas').remove();
+  document.getElementById('menu-screen').style.display = 'none';
   document.getElementById('finish-screen').style.display = 'flex';
+  document.getElementById('winnerText').style.fontSize = '60px';
+  document.getElementById('winnerText').style.textShadow = '3px 1px grey';
+  document.getElementById('winnerText').style.lineHeight = "10px";
   document.getElementById('winnerText').innerText = 'Player ' + winnerId + ' wins!';
+  document.getElementById('score').style.fontSize = '60px';
+  document.getElementById('score').style.color= 'rgb(0, 255, 255)';
+  document.getElementById('score').style.lineHeight = "10px";
+  document.getElementById('score').style.textShadow = '3px 1px grey';
+  document.getElementById('score').innerText = red + ' - ' + blue;
 }

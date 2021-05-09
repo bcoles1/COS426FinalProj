@@ -10,6 +10,7 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
     if(typeof c2 === 'number') c2 = new Color( c2 );
     
     var cubeGeometry = new BoxGeometry(w, h, d);
+    console.log(cubeGeometry);
     
     var cubeMaterial = new MeshPhongMaterial({
         vertexColors: VertexColors
@@ -105,10 +106,10 @@ class SeedScene extends Scene {
         //stand1.scene.scale = new Vector3(0.1, 0.1, 0.1);
         //console.log(stadium1);
         const redCircle = new Circle(this, 1);
-        redCircle.circle.material.color = new Color( 0xff0000 );
+        //redCircle.circle.material.color = new Color( 0xff0000 );
         this.state.red.circle = redCircle;
         const blueCircle = new Circle(this, 2);
-        blueCircle.circle.material.color = new Color( 0x0000ff );
+        //blueCircle.circle.material.color = new Color( 0x0000ff );
         this.state.blue.circle = blueCircle;
         //this.add(land, flower, lights);
         //make ball here.
@@ -267,11 +268,11 @@ class SeedScene extends Scene {
             if(this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
                 this.state.redScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 2, 0);
+                this.state.red.circle.circle.position.set(-100, 5, 0);
                 this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 2, 0);
+                this.state.blue.circle.circle.position.set(100, 5, 0);
                 this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 2, 0);
+                this.state.ball.circle.position.set(0, 5, 0);
                 this.state.ball.direction.set(0,0,0);
                 if(this.state.redScore == 3) {
                     this.state.gameOver = true;
@@ -284,11 +285,11 @@ class SeedScene extends Scene {
             if(this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
                 this.state.blueScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 2, 0);
+                this.state.red.circle.circle.position.set(-100, 5, 0);
                 this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 2, 0);
+                this.state.blue.circle.circle.position.set(100, 5, 0);
                 this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 2, 0);
+                this.state.ball.circle.position.set(0, 5, 0);
                 this.state.ball.direction.set(0,0,0);
                 if(this.state.blueScore == 3) {
                     this.state.gameOver = true;
@@ -302,7 +303,7 @@ class SeedScene extends Scene {
                 while (endPause.getElapsedTime() < 1) {
                     continue;
                   }
-                this.state.endGameFunc(this.state.loserId);
+                this.state.endGameFunc(this.state.loserId, this.state.scoreTime.redScore, this.state.scoreTime.blueScore);
             }
         }
     }
