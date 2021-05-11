@@ -3,6 +3,8 @@ import { TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeome
 import { Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3 } from 'three';
+
+
 const radius = 5;
 function makeGradientCube(c1, c2, w, d, h, opacity){
     if(typeof opacity === 'undefined') opacity = 1.0;
@@ -10,7 +12,6 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
     if(typeof c2 === 'number') c2 = new Color( c2 );
     
     var cubeGeometry = new BoxGeometry(w, h, d);
-    console.log(cubeGeometry);
     
     var cubeMaterial = new MeshPhongMaterial({
         vertexColors: VertexColors
@@ -40,6 +41,7 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
     
     return new Mesh(cubeGeometry, cubeMaterial);
 }
+
 class SeedScene extends Scene {
     constructor(endGame) {
         // Call parent Scene() constructor
@@ -55,6 +57,7 @@ class SeedScene extends Scene {
             circle: undefined,
             id: 2,
         };
+
         // Init state
         this.state = {
             //don't need the gui in final game!
@@ -88,9 +91,6 @@ class SeedScene extends Scene {
         this.background = new Color(0x7ec0ee);
         const ST = new ScoreTime();
         this.state.scoreTime = ST;
-
-       
-
 
         // Add meshes to scene
         //we're going to need redPlayer, bluePlayer, football
@@ -213,16 +213,28 @@ class SeedScene extends Scene {
         this.state.keys[keyCode] = down;
     }
 
+    resetPositions() {
+        this.state.red.circle.circle.position.set(-100, 5, 0);
+        this.state.red.circle.direction.set(0,0,0);
+        this.state.blue.circle.circle.position.set(100, 5, 0);
+        this.state.blue.circle.direction.set(0,0,0);
+        this.state.ball.circle.position.set(0, 5, 0);
+        this.state.ball.direction.set(0,0,0);
+    }
     
     update(timeStamp) {
-        //check collision between players.
         if(!this.state.gameOver) {
-            let diff, length, blueMom, redMom, transfer;
-            diff = this.state.red.circle.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
-            if(diff.length() < 10) {
-                length = diff.length();
-                diff.normalize().multiplyScalar(0.5*(10-length));
+            let diff,       // distance vector between objects
+                length,     // length of diff ^
+                blueMom,    // component of blue's momentum in the direction of collision
+                redMom,     // component of red's momentum in the direction of collision 
+                transfer;   // distance blue/red move after colliding 
 
+            //check collision between players (red and blue)
+            diff = this.state.red.circle.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
+            length = diff.length();
+            if (length < 10) {
+                diff.normalize().multiplyScalar(0.5 * (10 - length));
                 this.state.red.circle.circle.position.add(diff.clone());
                 this.state.blue.circle.circle.position.sub(diff.clone());
                 diff.normalize();
@@ -233,10 +245,10 @@ class SeedScene extends Scene {
                 this.state.blue.circle.direction.sub(transfer); 
             }
 
-        //check between red and ball
+            // check collision between red and ball
             diff = this.state.red.circle.circle.position.clone().sub(this.state.ball.circle.position.clone());
-            if(diff.length() < 10) {
-                length = diff.length();
+            length = diff.length(); 
+            if (length < 10) {
                 diff.normalize().multiplyScalar(0.5*(10-length));
                 this.state.red.circle.circle.position.add(diff.clone());
                 this.state.ball.circle.position.sub(diff.clone());
@@ -248,10 +260,10 @@ class SeedScene extends Scene {
                 this.state.ball.direction.sub(transfer.clone().multiplyScalar(4)); 
             }   
 
-        //check between blue and ball
+            // check collission between blue and ball
             diff = this.state.ball.circle.position.clone().sub(this.state.blue.circle.circle.position.clone());
-            if(diff.length() < 10) {
-                length = diff.length();
+            length = diff.length();
+            if (length < 10) {              
                 diff.normalize().multiplyScalar(0.5*(10-length));
                 this.state.ball.circle.position.add(diff.clone());
                 this.state.blue.circle.circle.position.sub(diff.clone());
@@ -263,39 +275,32 @@ class SeedScene extends Scene {
                 this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.25)); 
             }
 
-
+            // update ball positions based on keyboard input 
             this.arrowsInput();
             this.state.red.circle.update();
             this.state.blue.circle.update();
             this.state.ball.update();
+            // add weather effect checker?
 
-            if(this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+            // ball is in blue's goal?
+            if (this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+                // update score, reset positions
                 this.state.redScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 5, 0);
-                this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 5, 0);
-                this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 5, 0);
-                this.state.ball.direction.set(0,0,0);
-                if(this.state.redScore == 3) {
+                this.resetPositions(); // reset positions 
+                if(this.state.redScore == 3) { // winner?
                     this.state.gameOver = true;
                     this.state.loserId = 2;
                 }
-                //redScored
-                
             }
 
-            if(this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+            // ball is in red's goal?
+            if (this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+                // update score, reset positions 
                 this.state.blueScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
-                this.state.red.circle.circle.position.set(-100, 5, 0);
-                this.state.red.circle.direction.set(0,0,0);
-                this.state.blue.circle.circle.position.set(100, 5, 0);
-                this.state.blue.circle.direction.set(0,0,0);
-                this.state.ball.circle.position.set(0, 5, 0);
-                this.state.ball.direction.set(0,0,0);
-                if(this.state.blueScore == 3) {
+                this.resetPositions(); // reset positions 
+                if(this.state.blueScore == 3) { // winner?
                     this.state.gameOver = true;
                     this.state.loserId = 1;
                 }

@@ -49,13 +49,13 @@ const initGame = () => {
 
   const scene = new SeedScene(endGame);
 
-
   const renderer = new WebGLRenderer({ antialias: true });
 
+// Set up camera and position it in the scene 
   const camera = new PerspectiveCamera();
-  camera.position.set(340, 300, -10);
+  camera.position.set(0, 500, 100);
   camera.lookAt(new Vector3(0, 0, 0));
-  console.log(camera.position)
+  console.log(camera.position);
 
 // Set up renderer, canvas, and minor CSS adjustments
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -95,7 +95,7 @@ const initGame = () => {
   window.addEventListener('resize', windowResizeHandler, false);
 
   
-
+// Key press handler 
   const onKeyDown = (keyEvent) => {
     const turningMoves = ['KeyA', 'KeyD', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'ArrowDown', 'ArrowUp'];
     if (turningMoves.includes(keyEvent.code)) {
@@ -103,6 +103,7 @@ const initGame = () => {
     }
   };
 
+  // Key release handler 
   const onKeyUp = (keyEvent) => {
     const turningMoves = ['KeyA', 'KeyD', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'ArrowDown', 'ArrowUp'];
     if (turningMoves.includes(keyEvent.code)) {
