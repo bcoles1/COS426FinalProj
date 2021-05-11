@@ -53,8 +53,8 @@ const initGame = () => {
 
 // Set up camera and position it in the scene 
   const camera = new PerspectiveCamera();
-  camera.position.set(0, 500, 100);
-  camera.lookAt(new Vector3(0, 0, 0));
+  camera.position.set(0, 400, 300);
+  camera.lookAt(new Vector3(0, 0, -10));
   console.log(camera.position);
 
 // Set up renderer, canvas, and minor CSS adjustments

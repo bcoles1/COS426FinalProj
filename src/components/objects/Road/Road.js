@@ -46,6 +46,19 @@ class Road extends Group {
             gltf6.scene.position.set(350,6,-480);
             this.add(gltf6.scene);
         });
+        loader.load(MODEL, (gltf7) => {
+            gltf7.scene.scale.set(1, 1, 1);
+            //gltf2.scene.rotateY(Math.PI/2);
+            gltf7.scene.position.set(350,6,240);
+            this.add(gltf7.scene);
+        });
+        loader.load(MODEL, (gltf8) => {
+            gltf8.scene.scale.set(1, 1, 1);
+            //gltf2.scene.rotateY(Math.PI/2);
+            gltf8.scene.position.set(350,6,-600);
+            this.add(gltf8.scene);
+        });
+
 
     }
     update(timeStamp) {

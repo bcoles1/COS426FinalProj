@@ -4,3 +4,6 @@ export * from './Stand';
 export * from './Goal';
 export * from './Park';
 export * from './Road';
+export * from './Nature';
+export * from './Tree';
+export * from './Light';
