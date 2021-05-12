@@ -554,7 +554,7 @@ class SeedScene extends Scene {
             }
 
             //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
-            // UPDATE BALL POSITIONS, BALL/GOAL INTERACTIONS, POWERUPS
+            // UPDATE BALL POSITIONS, POWERUPS
             //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
 
             // update ball positions based on keyboard input 
@@ -600,9 +600,24 @@ class SeedScene extends Scene {
                 this.clearPowerUp(); 
             }
             
+            //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
+            // BALL/GOAL INTERACTIONS
+            //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
 
-            // ball is in blue's goal?
-            if (this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+            var red_goal_z = 25; 
+            var blue_goal_z = 25; 
+            if (this.state.power.type == 3 && this.state.power.holder == 0 
+                || this.state.power.type == 4 && this.state.power.holder == 1) { // blue's goal is big 
+                blue_goal_z = 50; 
+            }
+            else if (this.state.power.type == 3 && this.state.power.holder == 1
+                    || this.state.power.type == 4 && this.state.power.holder == 0) { // red's goal is big 
+                red_goal_z = 50; 
+            }
+
+
+            // ball is in blue's goal? 
+            if (this.state.ball.circle.position.x +radius> 200 && this.state.ball.circle.position.z < blue_goal_z && this.state.ball.circle.position.z > -blue_goal_z) {
                 // update score, reset positions
                 this.state.redScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
@@ -618,7 +633,7 @@ class SeedScene extends Scene {
             }
 
             // ball is in red's goal?
-            if (this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < 25 && this.state.ball.circle.position.z > -25) {
+            if (this.state.ball.circle.position.x -radius < -200 && this.state.ball.circle.position.z < red_goal_z && this.state.ball.circle.position.z > -red_goal_z) {
                 // update score
                 this.state.blueScore++;
                 this.state.scoreTime.updateScore(this.state.redScore, this.state.blueScore);
