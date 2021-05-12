@@ -1,7 +1,5 @@
 import * as Dat from 'dat.gui';
-import { GLTFLoader, BufferGeometryLoader, TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, TorusKnotGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
-import { Ferrari, Flower, Land, Stand, Goal, Circle, ScoreTime, Teleport} from 'objects';
-import { TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
+import { VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
 import { Tree, Light, Nature, Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3 } from 'three';
@@ -349,12 +347,19 @@ class SeedScene extends Scene {
 
         // BIG HIT 
         else if (type == 6) {
-            /*const loader = new GLTFLoader();
+            let radius = 3.5;  
+            let tubeRadius = 1.5;  
+            let radialSegments = 8;  
+            let tubularSegments = 64;  
+            let p = 2;  
+            let q = 3;  
+            let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
+            let texture = new TextureLoader().load('src/snowflake.jpeg');
+            let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
 
-            this.name = 'flower';
-            loader.load(MODEL, (gltf) => {
-            this.add(gltf.scene);
-            });*/
+            var mesh = new Mesh(geometry, material); 
+            this.add( mesh ); 
+            return mesh; 
             
         }
 
@@ -405,9 +410,12 @@ class SeedScene extends Scene {
                 if (rand == 1) { 
                     let x = getRandomInt(380) - 190; // 380, 190 chosen so power up can't exist within 10 units of edge 
                     let z = getRandomInt(380) - 190; 
-                    let type = getRandomInt(7); // 6 types of power ups 
-                    this.state.power.type = 2;
-                    this.state.power.mesh = this.makePowerUp(7, x, z); 
+                    let type = getRandomInt(7); // 8 types of power ups 
+                    this.state.power.mesh = this.makePowerUp(type, x, z); 
+                    if (type == 7) { // RANDOM powerup
+                        type = getRandomInt(6); 
+                    }
+                    this.state.power.type = type;
                     console.log(this.state.power.mesh); 
                     this.state.power.x = x; 
                     this.state.power.z = z; 
