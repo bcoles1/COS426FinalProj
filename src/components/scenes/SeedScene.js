@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
-import { LatheGeometry, SphereGeometry, Group, BoxBufferGeometry, TetrahedronGeometry, VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, MeshLambertMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock, IcosahedronGeometry } from 'three';
-import { Tree, Light, Nature, Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
+import { Group, BoxBufferGeometry, TetrahedronGeometry, VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, MeshLambertMaterial, DoubleSide, Mesh, Plane, Clock, IcosahedronGeometry } from 'three';
+import { Tree, Nature, Road, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3, Vector2 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
@@ -164,7 +164,6 @@ class SeedScene extends Scene {
         this.add(tree1);
         const nature1 = new Nature(this);
         this.add(nature1);
-        console.log(nature1);
         const stand1 = new Stand(this);
         this.add(stand1);
         const park1 = new Road(this);
@@ -420,7 +419,6 @@ class SeedScene extends Scene {
             // check whether a powerUp should be added 
             if (this.state.power.type == -1) {
                 let rand = getRandomInt(100); // 100 = magic number, tweek as necessary to change frequency of powerups
-                console.log(rand); 
                 if (rand == 1) { 
                     let x = getRandomInt(380) - 190; // 380, 190 chosen so power up can't exist within 10 units of edge 
                     let z = getRandomInt(380) - 190; 
