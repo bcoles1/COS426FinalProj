@@ -1,8 +1,8 @@
 import * as Dat from 'dat.gui';
-import { VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
+import { LatheGeometry, SphereGeometry, Group, BoxBufferGeometry, TetrahedronGeometry, VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, MeshLambertMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock, IcosahedronGeometry } from 'three';
 import { Tree, Light, Nature, Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
-import { Vector3 } from 'three';
+import { Vector3, Vector2 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
 import MODEL from './flower.gltf';
 //import { Teleport } from '../objects';
@@ -48,6 +48,43 @@ function makeGradientCube(c1, c2, w, d, h, opacity){
     return new Mesh(cubeGeometry, cubeMaterial);
 }
 
+function createWheels() {
+    const geometry = new BoxBufferGeometry(3, 3, 8.25);
+    const material = new MeshLambertMaterial({ color: 0x000000 });
+    const wheel = new Mesh(geometry, material);
+    return wheel;
+  }
+
+function createCar() {
+    const car = new Group();
+    
+    const backWheel = createWheels();
+    backWheel.position.y = 1.5;
+    backWheel.position.x = -4.5;
+    car.add(backWheel);
+    
+    const frontWheel = createWheels();
+    frontWheel.position.y = 1.5;  
+    frontWheel.position.x = 4.5;
+    car.add(frontWheel);
+  
+    const main = new Mesh(
+      new BoxBufferGeometry(15, 3.75, 7.5),
+      new MeshLambertMaterial({ color: 0xFF0000 })
+    );
+    main.position.y = 3;
+    car.add(main);
+  
+    const cabin = new Mesh(
+      new BoxBufferGeometry(8.25, 3, 6),
+      new MeshLambertMaterial({ color: 0x999999 })
+    );
+    cabin.position.x = -1.5;
+    cabin.position.y = 6.375;
+    car.add(cabin);
+  
+    return car;
+  }
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -275,57 +312,39 @@ class SeedScene extends Scene {
 
         // SPEED UP 
         else if (type == 1) {
-            let geometry = new BoxGeometry( 10, 10, 10 );
-            let texture = new TextureLoader().load('src/teleport2.jpeg');
-            let material = new MeshBasicMaterial({map: texture, side: DoubleSide});        
-            var cube = new Mesh( geometry, material );
-            this.add( cube ); 
-            return cube; 
+            var car = createCar(); 
+            this.add( car ); 
+            return car; 
         }
 
         
         // SLOW DOWN 
         else if (type == 2) {
-            let geometry = new BoxGeometry( 10, 10, 10 );
-            let texture = new TextureLoader().load('src/teleport_powerup.jpeg');
-            let material = new MeshBasicMaterial({map: texture, side: DoubleSide});        
-            var cube = new Mesh( geometry, material );
-            this.add( cube ); 
-            return cube;
+            var car = createCar(); 
+            this.add( car ); 
+            return car; 
         }
 
         // OPPONENT BIG GOAL 
         else if (type == 3) {
-            let radius = 3.5;  
-            let tubeRadius = 1.5;  
-            let radialSegments = 8;  
-            let tubularSegments = 64;  
-            let p = 2;  
-            let q = 3;  
-            let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
-            let texture = new TextureLoader().load('src/teleport2.jpeg');
+            var geometry = new IcosahedronGeometry( 7.5 );
+            let texture = new TextureLoader().load('src/banana.jpeg');
             let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
-
-            var mesh = new Mesh(geometry, material); 
-            this.add( mesh ); 
-            return mesh; 
+            var lathe = new Mesh( geometry, material );
+            //lathe.rotateX(Math.pi / 4); 
+            this.add( lathe ); 
+            return lathe; 
         }
 
         // OWN BIG GOAL 
         else if (type == 4) {
-            let radius = 3.5;  
-            let tubeRadius = 1.5;  
-            let radialSegments = 8;  
-            let tubularSegments = 64;  
-            let p = 2;  
-            let q = 3;  
-            let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
-            let texture = new TextureLoader().load('src/teleport2.jpeg');
+            var geometry = new IcosahedronGeometry( 7.5 );
+            let texture = new TextureLoader().load('src/banana.jpeg');
             let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
-
-            var mesh = new Mesh(geometry, material); 
-            this.add( mesh ); 
-            return mesh; 
+            var lathe = new Mesh( geometry, material );
+            //lathe.rotateX(Math.pi / 4); 
+            this.add( lathe ); 
+            return lathe; 
         }
 
         // ICE FIELD 
@@ -347,14 +366,9 @@ class SeedScene extends Scene {
 
         // BIG HIT 
         else if (type == 6) {
-            let radius = 3.5;  
-            let tubeRadius = 1.5;  
-            let radialSegments = 8;  
-            let tubularSegments = 64;  
-            let p = 2;  
-            let q = 3;  
-            let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
-            let texture = new TextureLoader().load('src/snowflake.jpeg');
+            let radius = 7.5;  
+            let geometry = new TetrahedronGeometry(radius); 
+            let texture = new TextureLoader().load('src/red_glow.jpeg');
             let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
 
             var mesh = new Mesh(geometry, material); 
