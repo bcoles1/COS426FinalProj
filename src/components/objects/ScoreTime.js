@@ -14,7 +14,7 @@ class ScoreTime {
         }
         this.redScore = redScore;
         this.blueScore = blueScore;
-        this.element.innerText = "Red " + this.redScore + " - " + this.blueScore + " Blue";
+        this.element.innerText = "Red " + this.redScore + "  -  " + this.blueScore + "Blue";
         
     }
 }
