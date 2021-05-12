@@ -427,7 +427,6 @@ class SeedScene extends Scene {
                         type = getRandomInt(6); 
                     }
                     this.state.power.type = type;
-                    console.log(this.state.power.mesh); 
                     this.state.power.x = x; 
                     this.state.power.z = z; 
                     //console.log(this.state.power.mesh); 
