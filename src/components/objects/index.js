@@ -7,8 +7,6 @@ export * from './BigRedGoal';
 export * from './Ferrari';
 export * from './Flower';
 export * from './Teleport';
-export * from './Park';
 export * from './Road';
 export * from './Nature';
 export * from './Tree';
-export * from './Light';

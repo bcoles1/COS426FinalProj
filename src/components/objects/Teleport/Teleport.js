@@ -27,7 +27,6 @@ class Teleport extends Group {
         let x = getRandomInt(380) - 190; // 380, 190 chosen so power up can't exist within 10 units of edge 
         let z = getRandomInt(380) - 190; 
         mesh.position.set(x, 10, z); 
-        console.log("here");
         return mesh; 
         
 

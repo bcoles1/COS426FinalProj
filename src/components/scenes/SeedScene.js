@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
 import { VertexColors, TextureLoader, TorusKnotGeometry, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
-import { Tree, Light, Nature, Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
+import { Tree, Nature, Road, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
@@ -127,7 +127,6 @@ class SeedScene extends Scene {
         this.add(tree1);
         const nature1 = new Nature(this);
         this.add(nature1);
-        console.log(nature1);
         const stand1 = new Stand(this);
         this.add(stand1);
         const park1 = new Road(this);
