@@ -35,13 +35,12 @@ import {
 
 console.log(document);
 
-
 document.getElementById('startButton').addEventListener('click', () => initGame());
 document.getElementById('replayButton').addEventListener('click', () => initGame());
 
+//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
 // Initialize core ThreeJS components
-//const initGame = () => {
-
+//…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
 const initGame = () => {
   console.log("We started the game");
   document.getElementById("menu-screen").style.display = 'none';
@@ -51,13 +50,13 @@ const initGame = () => {
 
   const renderer = new WebGLRenderer({ antialias: true });
 
-// Set up camera and position it in the scene 
+  // Set up camera and position it in the scene 
   const camera = new PerspectiveCamera();
   camera.position.set(0, 500, 100);
   camera.lookAt(new Vector3(0, 0, 0));
   console.log(camera.position);
 
-// Set up renderer, canvas, and minor CSS adjustments
+  // Set up renderer, canvas, and minor CSS adjustments
   renderer.setPixelRatio(window.devicePixelRatio);
   const canvas = renderer.domElement;
   canvas.style.display = 'block'; // Removes padding below canvas
@@ -65,15 +64,15 @@ const initGame = () => {
   document.body.style.overflow = 'hidden'; // Fix scrolling
   document.body.appendChild(canvas);
 
-// Set up controls
+  // Set up controls
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.minDistance = 4;
-//controls.maxDistance = 16;
+  //controls.maxDistance = 16;
   controls.update();
 
-// Render loop
+  // Render loop
   const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
@@ -84,7 +83,7 @@ const initGame = () => {
   };
   window.requestAnimationFrame(onAnimationFrameHandler);
 
-// Resize Handler
+  // Resize Handler
   const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
     renderer.setSize(innerWidth, innerHeight);
@@ -95,7 +94,7 @@ const initGame = () => {
   window.addEventListener('resize', windowResizeHandler, false);
 
   
-// Key press handler 
+  // Key press handler 
   const onKeyDown = (keyEvent) => {
     const turningMoves = ['KeyA', 'KeyD', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'ArrowDown', 'ArrowUp'];
     if (turningMoves.includes(keyEvent.code)) {
