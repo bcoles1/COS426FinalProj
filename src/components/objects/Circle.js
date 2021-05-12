@@ -1,5 +1,6 @@
 import {
     BoxGeometry,
+    TorusKnotGeometry, 
     Mesh,
     MeshBasicMaterial,
     MeshPhongMaterial,
@@ -13,64 +14,63 @@ import {
     TextureLoader
   } from 'three';
 
-const LEFT = 0;
+const LEFT  = 0;
 const RIGHT = 2;
-const UP = 1;
-const DOWN=3;
-const X = new Vector3(1, 0,0);
-const Y = new Vector3(0, 1,0);
-const Z = new Vector3(0, 0,1);
+const UP    = 1;
+const DOWN  = 3;
+const X = new Vector3(1, 0, 0);
+const Y = new Vector3(0, 1, 0);
+const Z = new Vector3(0, 0, 1);
+
 class Circle extends Group{
     constructor(parent, playerId) {
         super();
         this.direction = new Vector3(0,0,0);
+
         const geometry = new SphereGeometry(5, 64, 64);
         let material;
-        if(playerId > 1.1 && playerId < 1.9) {
+        if(playerId > 1.1 && playerId < 1.9) { // soccer ball 
             let texture2 = new TextureLoader().load('src/football.jpg');
             material = new MeshBasicMaterial({map: texture2});
         }
-        else if(playerId < 1.1) {
+        else if(playerId < 1.1) { // red player 
             let texture2 = new TextureLoader().load('src/red.jpg');
             material = new MeshBasicMaterial({map: texture2});
         }
-        else {
-        //idek what this color is - just roll with it for now.
-        let texture2 = new TextureLoader().load('src/blue.jpg');
-        material = new MeshBasicMaterial({map: texture2});
+        else { // blue player 
+            let texture2 = new TextureLoader().load('src/blue.jpg');
+            material = new MeshBasicMaterial({map: texture2});
         }
         this.circle = new Mesh(geometry, material);
-        this.circle.position.set(-100 + (playerId-1)*200, 5, 0);
+        this.circle.position.set(-100 + (playerId - 1) * 200, 5, 0);
         this.circle.rotateX(3*Math.PI/2);
         this.lost = false;
-        parent.add(this.circle)
-        //console.log(this.circle.position);
+        parent.add(this.circle);
 
         //parent.addToUpdateList(this);
     }
+
     updateDir(dir) {
-        //console.log(dir);
-        if(dir === 1) {
-            //console.log(this.direction);
+        if(dir === 1) { // right 
             this.direction.z = Math.max(-1.5, this.direction.z - 0.05);
         }
-        else if(dir === 3) {
+        else if(dir === 3) { // down
             this.direction.z = Math.min(1.5, this.direction.z + 0.05);
         }
-        else if(dir === 0) {
+        else if(dir === 0) { // left
             this.direction.x = Math.max(-1.5, this.direction.x - 0.05);
         }
-        else  {
+        else  { // up
             this.direction.x = Math.min(1.5, this.direction.x + 0.05);
         }
-       // console.log(this.direction);
     }
-    update() {
+
+    update(powerup) {
         let radius = 5
         this.circle.rotateOnWorldAxis(X, this.direction.z/10);     
         this.circle.rotateOnWorldAxis(Z, -this.direction.x/10);    
-    //maybe some reflection law logic to better improve bounces
-    //this is trash at the minute, defintely improve a l'avenir
+        //maybe some reflection law logic to better improve bounces
+        //this is trash at the minute, defintely improve a l'avenir
         if(this.circle.position.x + radius > 200) {
             this.circle.position.x = 200-radius;
             this.direction.x = -this.direction.x/2;
@@ -99,10 +99,13 @@ class Circle extends Group{
         //do the position change
         let toAdd = this.direction.clone()
         this.circle.position.add(toAdd);
+        if (powerup == 1) {
+            this.circle.position.add(toAdd); 
+        }
+        if (powerup == 2) {
+            this.circle.position.sub(toAdd.multiplyScalar(0.5)); 
+        }
         this.direction.multiplyScalar(0.99);
-
-
-
     }
 }
 export default Circle;

@@ -1,6 +1,8 @@
 import * as Dat from 'dat.gui';
 import { GLTFLoader, BufferGeometryLoader, TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, TorusKnotGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
 import { Ferrari, Flower, Land, Stand, Goal, Circle, ScoreTime, Teleport} from 'objects';
+import { TextureLoader,  VertexColors, MeshPhongMaterial, Scene, Color, BoxGeometry, PlaneGeometry, MeshBasicMaterial, DoubleSide, Mesh, CircleBufferGeometry, Plane, Clock } from 'three';
+import { Tree, Light, Nature, Park, Road, Flower, Land, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
@@ -122,15 +124,18 @@ class SeedScene extends Scene {
 
         const lights = new BasicLights();
         //need to make this.
-
+        //const light1 = new Light(this);
+        const tree1 = new Tree(this);
+        this.add(tree1);
+        const nature1 = new Nature(this);
+        this.add(nature1);
+        console.log(nature1);
         const stand1 = new Stand(this);
-        this.add(stand1); 
-        console.log(stand1.position); 
-        var target = new Vector3(); // create once an reuse it
-
-        stand1.getWorldPosition( target )
-        console.log(target); 
-        
+        this.add(stand1);
+        const park1 = new Road(this);
+        this.add(park1);
+        //const park2 = new Park(this);
+        //this.add(park2);
         //stand1.scale = new Vector3(0.1, 0.1, 0.1);
         //stand1.scene.scale = new Vector3(0.1, 0.1, 0.1);
         //console.log(stadium1);
