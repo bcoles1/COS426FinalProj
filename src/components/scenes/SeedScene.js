@@ -4,7 +4,6 @@ import { Tree, Nature, Road, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
-import MODEL from './flower.gltf';
 //import { Teleport } from '../objects';
 
 //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
@@ -405,7 +404,6 @@ class SeedScene extends Scene {
             // check whether a powerUp should be added 
             if (this.state.power.type == -1) {
                 let rand = getRandomInt(100); // 100 = magic number, tweek as necessary to change frequency of powerups
-                console.log(rand); 
                 if (rand == 1) { 
                     let x = getRandomInt(380) - 190; // 380, 190 chosen so power up can't exist within 10 units of edge 
                     let z = getRandomInt(380) - 190; 
