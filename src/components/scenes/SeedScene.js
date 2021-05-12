@@ -72,12 +72,12 @@ class SeedScene extends Scene {
             id: 2,
         };
         const powerUp = {
-            type: -1, // which of the 6 power ups it is 
-            holder: undefined, // who has the power up?
+            type: -1, // which of the power ups it is 
+            holder: undefined, // who has the power up
             timeLeft: undefined, // how much time is left on power up 
-            mesh: undefined, 
-            x: undefined, 
-            z: undefined,
+            mesh: undefined, // power up object
+            x: undefined, // x position 
+            z: undefined, // z position 
         };
 
         // Init state
@@ -457,7 +457,7 @@ class SeedScene extends Scene {
             }
 
             // BIG GOAL power up 
-            if (this.state.power.type == 3 && this.state.power.timeLeft >= 99.6) {
+            if (this.state.power.type == 3 && this.state.power.timeLeft > 99.6) {
                 if (this.state.power.holder == 0) {
                     
                     let goal = new BigRedGoal(); 
@@ -473,7 +473,7 @@ class SeedScene extends Scene {
                     this.goal = goal; 
                 }
             }
-            else if (this.state.power.type == 4 && this.state.power.timeLeft >= 99.6) {
+            else if (this.state.power.type == 4 && this.state.power.timeLeft > 99.6) {
                 if (this.state.power.holder == 0) {
                     this.remove(this.goal); 
                     let goal = new BigBlueGoal(); 
@@ -517,6 +517,9 @@ class SeedScene extends Scene {
                 redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
 
                 transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                if (this.state.power.type == 6) {
+                    transfer.multiplyScalar(3); 
+                }
                 this.state.red.circle.direction.add(transfer);
                 this.state.blue.circle.direction.sub(transfer); 
             }
@@ -533,6 +536,9 @@ class SeedScene extends Scene {
                 blueMom = this.state.ball.direction.clone().projectOnVector(diff);
                 redMom = this.state.red.circle.direction.clone().projectOnVector(diff);
                 transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                if (this.state.power.type == 6) {
+                    transfer.multiplyScalar(3); 
+                }
                 this.state.red.circle.direction.add(transfer.clone().multiplyScalar(0.25));
                 this.state.ball.direction.sub(transfer.clone().multiplyScalar(4)); 
             }   
@@ -549,6 +555,9 @@ class SeedScene extends Scene {
                 blueMom = this.state.blue.circle.direction.clone().projectOnVector(diff);
                 redMom = this.state.ball.direction.clone().projectOnVector(diff);
                 transfer = blueMom.clone().sub(redMom.clone()).multiplyScalar(0.5);
+                if (this.state.power.type == 6) {
+                    transfer.multiplyScalar(3); 
+                }
                 this.state.ball.direction.add(transfer.clone().multiplyScalar(4));
                 this.state.blue.circle.direction.sub(transfer.clone().multiplyScalar(0.25)); 
             }
