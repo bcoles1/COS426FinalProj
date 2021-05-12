@@ -4,7 +4,6 @@ export * from './Stand';
 export * from './Goal';
 export * from './BigBlueGoal';
 export * from './BigRedGoal';
-export * from './Ferrari';
 export * from './Flower';
 export * from './Teleport';
 export * from './Road';
