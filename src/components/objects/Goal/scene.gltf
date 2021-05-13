@@ -271,15 +271,15 @@
   "buffers": [
     {
       "byteLength": 42912,
-      "uri": "src/components/objects/Goal/scene.bin"
+      "uri": "Goalscene.bin"
     }
   ],
   "images": [
     {
-      "uri": "src/components/objects/Goal/textures/Metal_0_baseColor.png"
+      "uri": "Metal_0_baseColor.png"
     },
     {
-      "uri": "src/components/objects/Goal/textures/Metal_baseColor.png"
+      "uri": "Metal_baseColor.png"
     }
   ],
   "materials": [

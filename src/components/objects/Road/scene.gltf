@@ -124,15 +124,15 @@
   "buffers": [
     {
       "byteLength": 4584,
-      "uri": "src/components/objects/Road/scene.bin"
+      "uri": "Roadscene.bin"
     }
   ],
   "images": [
     {
-      "uri": "src/components/objects/Road/textures/Jezdnia_Kraweznik_MAT_baseColor.jpg"
+      "uri": "Jezdnia_Kraweznik_MAT_baseColor.jpg"
     },
     {
-      "uri": "src/components/objects/Road/textures/Jezdnia_Kraweznik_MAT_normal.png"
+      "uri": "Jezdnia_Kraweznik_MAT_normal.png"
     }
   ],
   "materials": [

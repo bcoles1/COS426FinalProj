@@ -85,6 +85,38 @@ module.exports = {
         from: 'src/components/objects/Stand/Dellis_American_Oak_Tar_1_baseColor.jpeg',
         to: 'Dellis_American_Oak_Tar_1_baseColor.jpeg',
       },
+      {
+        from: 'src/components/objects/Road/Jezdnia_Kraweznik_MAT_baseColor.jpg',
+        to: 'Jezdnia_Kraweznik_MAT_baseColor.jpg',
+      },
+      {
+        from: 'src/components/objects/Road/Jezdnia_Kraweznik_MAT_normal.png',
+        to: 'Jezdnia_Kraweznik_MAT_normal.png',
+      },
+      {
+        from: 'src/components/objects/Road/Roadscene.bin',
+        to: 'Roadscene.bin',
+      },
+      {
+        from: 'src/components/objects/Tree/Treescene.bin',
+        to: 'Treescene.bin',
+      },
+      {
+      from: 'src/components/objects/Nature/Naturescene.bin',
+      to: 'Naturescene.bin',
+      },
+      {
+        from: 'src/components/objects/Goal/Goalscene.bin',
+        to: 'Goalscene.bin',
+      },
+      {
+        from: 'src/components/objects/Goal/Metal_baseColor.png',
+        to: 'Metal_baseColor.png',
+      },
+      {
+        from: 'src/components/objects/Goal/Metal_0_baseColor.png',
+        to: 'Metal_0_baseColor.png',
+      },
   ]),
   ],
 };
