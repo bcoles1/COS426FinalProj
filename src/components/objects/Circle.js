@@ -13,6 +13,9 @@ import {
     SphereGeometry,
     TextureLoader
   } from 'three';
+import footballTex from './football.jpg';
+import redTex from './red.jpg';
+import blueTex from './blue.jpg';
 
 const LEFT  = 0;
 const RIGHT = 2;
@@ -30,15 +33,15 @@ class Circle extends Group{
         const geometry = new SphereGeometry(5, 64, 64);
         let material;
         if(playerId > 1.1 && playerId < 1.9) { // soccer ball 
-            let texture2 = new TextureLoader().load('src/football.jpg');
+            let texture2 = new TextureLoader().load(footballTex);
             material = new MeshBasicMaterial({map: texture2});
         }
         else if(playerId < 1.1) { // red player 
-            let texture2 = new TextureLoader().load('src/red.jpg');
+            let texture2 = new TextureLoader().load(redTex);
             material = new MeshBasicMaterial({map: texture2});
         }
         else { // blue player 
-            let texture2 = new TextureLoader().load('src/blue.jpg');
+            let texture2 = new TextureLoader().load(blueTex);
             material = new MeshBasicMaterial({map: texture2});
         }
         this.circle = new Mesh(geometry, material);

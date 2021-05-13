@@ -4,6 +4,8 @@ import { Tree, Nature, Road, Stand, Goal, Circle, ScoreTime } from 'objects';
 import { BasicLights } from 'lights';
 import { Vector3, Vector2 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
+import fieldTex from './field.jpg';
+import widerGrass from './widerGrass.jpg';
 //import { Teleport } from '../objects';
 
 //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
@@ -202,7 +204,7 @@ class SeedScene extends Scene {
         wall4.rotateY(Math.PI/2);
 
         let fieldGeometry = new PlaneGeometry(width, 400, 1);
-        let texture = new TextureLoader().load('src/field.jpg');
+        let texture = new TextureLoader().load(fieldTex);
         let fieldMaterial = new MeshBasicMaterial({map: texture, side: DoubleSide});
         const field = new Mesh(fieldGeometry, fieldMaterial);
         field.position.set(0,1,0);
@@ -210,7 +212,7 @@ class SeedScene extends Scene {
         field.rotateZ(Math.PI/2);
 
         let fieldGeometry2 = new PlaneGeometry(2000, 2000, 1);
-        let texture2 = new TextureLoader().load('src/widerGrass.jpg');
+        let texture2 = new TextureLoader().load(widerGrass);
         let fieldMaterial2 = new MeshBasicMaterial({map: texture2, side: DoubleSide});
         const field2 = new Mesh(fieldGeometry2, fieldMaterial2);
         field2.position.set(0,0,0);

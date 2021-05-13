@@ -1,6 +1,7 @@
 import { Group, TorusKnotGeometry, TextureLoader, MeshBasicMaterial, Mesh, DoubleSide } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+import teleportPo from './teleport_powerup.jpeg';
 
 var t = 0; 
 
@@ -20,7 +21,7 @@ class Teleport extends Group {
         let p = 2;  
         let q = 3;  
         let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
-        let texture = new TextureLoader().load('src/teleport_powerup.jpeg');
+        let texture = new TextureLoader().load(teleportPo);
         let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
 
         var mesh = new Mesh(geometry, material); 
