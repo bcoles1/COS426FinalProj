@@ -37,6 +37,22 @@ module.exports = {
         use: 'raw-loader',
         exclude: path.resolve(__dirname, './node_modules/'),
       },
+      {
+        test: /\.(bin)$/i,
+        exclude: path.resolve(__dirname, './node_modules/'),
+        use: [
+          {
+            loader: 'url-loader',
+             options: {
+               encoding: false,
+               mimetype: false,
+               generator: (content) => {
+                 return content;
+               }
+             },
+           },
+         ],
+      },
     ],
   },
   resolve: {
@@ -61,6 +77,10 @@ module.exports = {
           from: 'src/win.gif',
           to: 'win.gif',
       },
+      {
+        from: 'src/components/objects/Stand/Standscene.bin',
+        to: 'Standscene.bin',
+    },
   ]),
   ],
 };
