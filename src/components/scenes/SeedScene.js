@@ -6,6 +6,7 @@ import { Vector3, Vector2 } from 'three';
 import { BigBlueGoal, BigRedGoal } from '../objects';
 import fieldTex from './field.jpg';
 import widerGrass from './widerGrass.jpg';
+import telePo from './teleport2.jpg';
 //import { Teleport } from '../objects';
 
 //…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………//
@@ -302,7 +303,7 @@ class SeedScene extends Scene {
             let p = 2;  
             let q = 3;  
             let geometry = new TorusKnotGeometry(radius, tubeRadius, tubularSegments, radialSegments, p, q);
-            let texture = new TextureLoader().load('src/teleport2.jpeg');
+            let texture = new TextureLoader().load(telePo);
             let material = new MeshBasicMaterial({map: texture, side: DoubleSide});
 
             var mesh = new Mesh(geometry, material); 

@@ -51,5 +51,15 @@ module.exports = {
       favicon: 'src/favicon.ico',
       template: 'src/index.html'
     }),
+    new CopyPlugin([
+      {
+          from: './ctqo.gif',
+          to: 'ctqo.gif',
+      },
+      {
+          from: './win.gif',
+          to: 'win.gif',
+      },
+  ]),
   ],
 };
