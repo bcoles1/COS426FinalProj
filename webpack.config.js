@@ -80,7 +80,11 @@ module.exports = {
       {
         from: 'src/components/objects/Stand/Standscene.bin',
         to: 'Standscene.bin',
-    },
+      },
+      {
+        from: 'src/components/objects/Stand/Dellis_American_Oak_Tar_1_baseColor.jpeg',
+        to: 'Dellis_American_Oak_Tar_1_baseColor.jpeg',
+      },
   ]),
   ],
 };
