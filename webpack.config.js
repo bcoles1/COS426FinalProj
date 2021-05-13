@@ -54,11 +54,11 @@ module.exports = {
     }),
     new CopyPlugin([
       {
-          from: './ctqo.gif',
+          from: 'src/ctqo.gif',
           to: 'ctqo.gif',
       },
       {
-          from: './win.gif',
+          from: 'src/win.gif',
           to: 'win.gif',
       },
   ]),
